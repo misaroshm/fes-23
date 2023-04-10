@@ -1,2 +1,5 @@
 # fes-23
-Repository fo FeS-23's labs🫶🏻
+Repository for FeS-23's labs🫶🏻
+
+
+ps. pls, create your own folder!!!
