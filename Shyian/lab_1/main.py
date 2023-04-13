@@ -1,85 +1,101 @@
-def read_file(file_path: str) -> str:
-    """
-    param: file_path
-    return: The function takes a file path as a param,
-        opens and reads the contents of the file,
-        then returns it.
-    """
-    with open(file_path) as f:
-        return f.read()
+from abc import ABC, abstractmethod
 
+class Piece(ABC):
+    @abstractmethod
+    def move(self):
+        pass
 
-def read_file_converting(file_path: str) -> str:
-    """
-    param: file_path
-    return: The function takes a file path as a param,
-        opens, reads the contents, and replaces specified chars in the file,
-        then returns converted str.
-    """
-    with open(file_path) as f:
-        return f.read().replace('.', '').replace(',', '').lower()
+class Pawn(Piece):
+    def move(self):
+        print("Pawn moved")
 
+class Rook(Piece):
+    def move(self):
+        print("Rook moved")
 
-def words_and_sentences_count(file_path: str) -> (int, int):
-    """
-    param: file_path
-    return: The function returns amount of words and sentences.
-    """
-    counter_for_words = 0
-    counter_for_sentences = 0
-    content = read_file(file_path)
-    for ch in content:
-        if ch == " " or ch == "\n":
-            counter_for_words += 1
-        elif ch == ".":
-            counter_for_sentences += 1
-    return counter_for_words, counter_for_sentences
+class Knight(Piece):
+    def move(self):
+        print("Knight moved")
 
+class Bishop(Piece):
+    def move(self):
+        print("Bishop moved")
 
-def get_palindromes(file_path: str) -> list:
-    """
-    param: file_path
-    return: The function returns the list of palindromes.
-    """
-    f = read_file_converting(file_path)
-    palindromes = []
-    for word in f.split():
-        if len(word) == 1:
-            continue
-        elif word == word[::-1]:
-            palindromes.append(word)
+class Queen(Piece):
+    def move(self):
+        print("Queen moved")
+
+class King(Piece):
+    def move(self):
+        print("King moved")
+
+class PieceFactory:
+    @staticmethod
+    def create_piece(piece_type):
+        if piece_type == "pawn":
+            return Pawn()
+        elif piece_type == "rook":
+            return Rook()
+        elif piece_type == "knight":
+            return Knight()
+        elif piece_type == "bishop":
+            return Bishop()
+        elif piece_type == "queen":
+            return Queen()
+        elif piece_type == "king":
+            return King()
         else:
-            continue
-    return palindromes
+            raise ValueError("Invalid piece type")
 
+class Board:
+    def __init__(self):
+        self.board = [[None for _ in range(8)] for _ in range(8)]
+        self._populate_board()
 
-def get_palingrames(file_path) -> list:
-    """
-    param: file_path
-    :return: The function returns the list of palingrames.
-    """
-    palingrames = []
-    text = read_file(file_path)
-    words = text.split()
-    for i in range(len(words)):
-        for j in range(i + 1, len(words)):
-            word1 = words[i]
-            word2 = words[j]
-            if word1 in word2[::-1] or word1 in word2:
-                palingrames.append(word1 + "-" + word2)
-            else:
-                continue
-    if palingrames == 0:
-        print("There is no palingrames")
-    return palingrames
+    def _populate_board(self):
+        for i in range(8):
+            self.board[1][i] = PieceFactory.create_piece("pawn")
+            self.board[6][i] = PieceFactory.create_piece("pawn")
 
+        self.board[0][0] = PieceFactory.create_piece("rook")
+        self.board[0][1] = PieceFactory.create_piece("knight")
+        self.board[0][2] = PieceFactory.create_piece("bishop")
+        self.board[0][3] = PieceFactory.create_piece("queen")
+        self.board[0][4] = PieceFactory.create_piece("king")
+        self.board[0][5] = PieceFactory.create_piece("bishop")
+        self.board[0][6] = PieceFactory.create_piece("knight")
+        self.board[0][7] = PieceFactory.create_piece("rook")
 
-file_path1 = "palindromes.txt"
-file_path2 = "palingrames.txt"
+        self.board[7][0] = PieceFactory.create_piece("rook")
+        self.board[7][1] = PieceFactory.create_piece("knight")
+        self.board[7][2] = PieceFactory.create_piece("bishop")
+        self.board[7][3] = PieceFactory.create_piece("queen")
+        self.board[7][4] = PieceFactory.create_piece("king")
+        self.board[7][5] = PieceFactory.create_piece("bishop")
+        self.board[7][6] = PieceFactory.create_piece("knight")
+        self.board[7][7] = PieceFactory.create_piece("rook")
 
-print(f"The number of words in file '{file_path1}' is {words_and_sentences_count(file_path1)[0]}"
-      f" and the number of sentences in file '{file_path1}' is {words_and_sentences_count(file_path1)[1]}")
-print(f"The number of words in file '{file_path2}' is {words_and_sentences_count(file_path2)[0] + 1}"
-      f" and the number of sentences in file '{file_path2}' is {words_and_sentences_count(file_path2)[1]}")
-print("List of palindromes: ", get_palindromes(file_path1))
-print("List of palingrames: ", get_palingrames(file_path2))
+class Game:
+    def __init__(self):
+        self.board = Board()
+        self.current_player = "white"
+
+    def play(self):
+        while True:
+            self._display_board()
+            move = input(f"{self.current_player}'s move: ")
+            # process move logic
+
+            self.current_player = "black" if self.current_player == "white" else "white"
+
+    def _display_board(self):
+        for row in self.board.board:
+            for piece in row:
+                if piece:
+                    print(type(piece).__name__[0], end=" ")
+                else:
+                    print("-", end=" ")
+            print()
+
+game = Game()
+game.play()
