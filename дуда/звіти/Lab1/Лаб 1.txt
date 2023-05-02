@@ -1,1 +1,124 @@
+from typing import Tuple, List
+from typing import Dict
 
+
+def read_file(file_path: str) -> Tuple[str, int, int]:
+    """
+        Reads a text file and returns its content, number of words, and number of sentences.
+
+        Args:
+            file_path: A string representing the file path.
+
+        Returns:
+            A tuple containing the file content, number of words, and number of sentences.
+
+        Raises:
+            FileNotFoundError: If the file cannot be found.
+    """
+    try:
+        with open(file_path, 'r') as file:
+            content = file.read()
+
+            # count words
+            words_count = len(content.split())
+
+            # count sentences
+            sentence_count = len([char for char in content if char in ['.', '?', '!']])
+
+            return content, words_count, sentence_count
+    except FileNotFoundError:
+        raise FileNotFoundError(f"{file_path} not found.")
+
+
+def check_pallindrome(word: str) -> bool:
+    """
+        Checks if the given word can form a palingram when combined with another word.
+
+        Args:
+            word: A string representing the word to check.
+
+        Returns:
+            True if the word can form a palingram, False otherwise.
+    """
+    # Convert the word to lowercase and remove non-alphanumeric characters
+    word = ''.join(c for c in word.lower())
+
+    # Check if the word is equal to its reverse
+    return word == word[::-1]
+
+
+def get_palingrams(content: str) -> List[Tuple[str, str]]:
+    """
+        Checks if the given word can form a palingram when combined with another word.
+
+        Args:
+        word: A string representing the word to check.
+
+        Returns:
+        True if the word can form a palingram, False otherwise.
+    """
+
+    word_list = content.split()
+    pali_list = []
+    words_set = set(word_list)
+    for word in words_set:
+        # Get the length of the word and reverse it
+        end = len(word)
+        reverse = word[::-1]
+        # Only interested in words longer than one letter
+        if end > 1 and word != reverse:
+            for i in range(end):
+                # Check if a reversed word fragment is connected to a
+                # Palindromic sequence
+                if word[i:] == reverse[:end-i] and reverse[end-i:] in words_set:
+                    pali_list.append((word, reverse[end-i:]))
+                if word[:i] == reverse[end-i:] and reverse[:end-i] in words_set:
+                    pali_list.append((reverse[:end-i], word))
+    return pali_list
+
+
+def get_all_palindromes(content: str) -> Dict[str, int]:
+    """
+        Finds all palindromes in the given content and returns them as a dictionary
+        with their frequency.
+
+        Args:
+            content: A string representing the content to search for palindromes.
+
+        Returns:
+            A dictionary containing all palindromes in the content and their frequency.
+    """
+    palindromes = {}
+
+    # Loop through each word in the content
+    for word in content.split():
+
+        # Check if the word is a palindrome
+        if check_pallindrome(word):
+            # If it's a palindrome, add it to the dictionary or increment its frequency
+            palindromes[word] = palindromes.get(word, 0) + 1
+
+    return palindromes
+
+
+if __name__ == '__main__':
+    path = 'test.txt'
+    try:
+        con, word_count, sen_count = read_file(path)
+        print(f"Number of words: {word_count}")
+        print(f"Number of sentences: {sen_count}")
+
+        # Get all palingrams in the content
+        palingrams = get_palingrams(con)
+        print("\n-------------------------Palingrams:-------------------------")
+        for palingram in palingrams:
+            print(f"{palingram[0]} {palingram[1]}")
+
+        # Get all palindroms in the content
+        palindrom = get_all_palindromes(con)
+        print("\n-------------------------Palindroms:-------------------------")
+        for data, freq in palindrom.items():
+            print(f"{data}: {freq}")
+
+    except FileNotFoundError as e:
+        print(str(e))
