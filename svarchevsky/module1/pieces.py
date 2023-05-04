@@ -105,9 +105,17 @@ class Knight(Piece):
             self.symbol = '♞'
 
     def can_move(self, cur_row: int, cur_col: int, to_row: int, to_col: int) -> bool:
-        # TODO: knight logic here
-        # get_all_
-        return True
+        row_absoffset = abs(to_row - cur_row)
+        col_absoffset = abs(to_col - cur_col)
+        # The knight can move in an L-shape, i.e. move two squares vertically and one square horizontally,
+        # or two squares horizontally and one square vertically
+        if (row_absoffset, col_absoffset) == (1, 2) or (row_absoffset, col_absoffset) == (2, 1):
+            # Check if the destination square is empty or has a piece of the opposite color
+            target_piece = self.board.get_piece(to_row, to_col)
+            if target_piece is None or target_piece.color != self.color:
+                return True
+
+        return False
 
     def __str__(self):
         return self.symbol
@@ -126,8 +134,26 @@ class Bishop(Piece):
             self.symbol = '♝'
 
     def can_move(self, cur_row: int, cur_col: int, to_row: int, to_col: int) -> bool:
-        # TODO: bishop logic here
-        return True
+        # check if the move is diagonal
+        if abs(to_row - cur_row) != abs(to_col - cur_col):
+            return False
+
+        # check if there are any pieces blocking the move
+        row_direction = 1 if to_row > cur_row else -1
+        col_direction = 1 if to_col > cur_col else -1
+        row, col = cur_row + row_direction, cur_col + col_direction
+        while row != to_row and col != to_col:
+            if not self.board.is_empty(row, col):
+                return False
+            row += row_direction
+            col += col_direction
+
+        # check if the destination square is empty or contains an opponent's piece
+        target_piece = self.board.get_piece(to_row, to_col)
+        if target_piece is None or target_piece.color != self.color:
+            return True
+
+        return False
 
     def __str__(self):
         return self.symbol
@@ -146,8 +172,31 @@ class Rook(Piece):
             self.symbol = '♜'
 
     def can_move(self, cur_row: int, cur_col: int, to_row: int, to_col: int) -> bool:
-        # TODO: rook logic here
-        return True
+        # check if out of bounds
+        if not self.board.is_valid_coords(to_row, to_col):
+            return False
+
+        # check if trying to move diagonally
+        if cur_row != to_row and cur_col != to_col:
+            return False
+
+        # check if there is any piece in the way
+        if cur_row == to_row:
+            # move horizontally
+            start, end = (cur_col, to_col) if cur_col < to_col else (to_col, cur_col)
+            for col in range(start + 1, end):
+                if not self.board.is_empty(cur_row, col):
+                    return False
+        else:
+            # move vertically
+            start, end = (cur_row, to_row) if cur_row < to_row else (to_row, cur_row)
+            for row in range(start + 1, end):
+                if not self.board.is_empty(row, cur_col):
+                    return False
+
+        # check if destination is occupied by opposite color piece or is empty
+        target_piece = self.board.get_piece(to_row, to_col)
+        return target_piece is None or target_piece.color != self.color #
 
     def __str__(self):
         return self.symbol
@@ -166,8 +215,10 @@ class Queen(Piece):
             self.symbol = '♛'
 
     def can_move(self, cur_row: int, cur_col: int, to_row: int, to_col: int) -> bool:
-        # TODO: queen logic here
-        return True
+        # queen is moving in the same way as bishop or rook, so i use both logics combined
+        bishop = Bishop(self.color, cur_row, cur_col, self.board)
+        rook = Rook(self.color, cur_row, cur_col, self.board)
+        return bishop.can_move(cur_row, cur_col, to_row, to_col) or rook.can_move(cur_row, cur_col, to_row, to_col)
 
     def __str__(self):
         return self.symbol
@@ -186,8 +237,15 @@ class King(Piece):
             self.symbol = '♚'
 
     def can_move(self, cur_row: int, cur_col: int, to_row: int, to_col: int) -> bool:
-        # TODO: king logic here
-        return True
+        # king is actually moving by a square
+        # so just checking if it's moving one square horizontally or vertically
+        if abs(to_row - cur_row) <= 1 and abs(to_col - cur_col) <= 1:
+            # check if destination is not occupied by a friendly piece
+            target_piece = self.board.get_piece(to_row, to_col)
+            if target_piece is None or target_piece.color != self.color:
+                return True
+        # no castling handler now.
+        return False
 
     def __str__(self):
         return self.symbol

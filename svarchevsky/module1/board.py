@@ -75,7 +75,7 @@ class Board:
             return False
         piece = self.board[row][col]
         if piece.type == 'NULL':
-            print(f"No piece is found in this position: {row}{col}")
+            print(f"No piece is found in this position: {row} {col}")
             return False
         if not piece.can_move(row, col, to_row, to_col):
             print(f"Move to {to_row}, {to_col} is Invalid for {piece.type}")
