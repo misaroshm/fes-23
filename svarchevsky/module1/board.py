@@ -81,7 +81,10 @@ class Board:
             print(f"Move to {to_row}, {to_col} is Invalid for {piece.type}")
             return False
         else:
-            print(f"Successful move.")
+            ptype = self.get_piece(to_row, to_col)
+            if ptype.type != 'NULL':
+                print(f"Successful move! {ptype.color} {ptype.type} was knocked down!")
+            else: print(f"Successful move.")
             self.board[to_row][to_col] = piece
             self.board[row][col] = self.piece_handler.set_piece(self, "CELL", None, row, col)
             return True
@@ -104,7 +107,8 @@ class Board:
         print("⌜|a||b||c||d||e||f||g||h|⌝")
         res = ''
         for y in range(8):
-            res += str(8 - y) + ' |' + '|'.join(map(str, self.board[y])) + f"| {str(8 - y)}\n"
+            #       str(8 - y)                                               str(8 - y)
+             res += str(y) + ' |' + '|'.join(map(str, self.board[y])) + f"| {str(y)}\n"
         return res + "⌞|a||b||c||d||e||f||g||h|⌟"
 
 

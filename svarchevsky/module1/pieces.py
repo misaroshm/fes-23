@@ -84,7 +84,8 @@ class Pawn(Piece):
         # сheck if the pawn is capturing a piece
         elif abs(to_col - cur_col) == 1 and to_row - cur_row == direction:
             target_piece = self.board.get_piece(to_row, to_col)
-            if target_piece is not None and not CELL and target_piece.color != self.color:
+            #if target_piece is not None and not CELL and target_piece.color != self.color:
+            if target_piece is not None and target_piece.color != self.color:
                 return True
         return False
 
@@ -112,7 +113,7 @@ class Knight(Piece):
         if (row_absoffset, col_absoffset) == (1, 2) or (row_absoffset, col_absoffset) == (2, 1):
             # Check if the destination square is empty or has a piece of the opposite color
             target_piece = self.board.get_piece(to_row, to_col)
-            if target_piece is None or target_piece.color != self.color:
+            if target_piece is not None and target_piece.color != self.color:
                 return True
 
         return False
@@ -150,7 +151,7 @@ class Bishop(Piece):
 
         # check if the destination square is empty or contains an opponent's piece
         target_piece = self.board.get_piece(to_row, to_col)
-        if target_piece is None or target_piece.color != self.color:
+        if target_piece is not None and target_piece.color != self.color:
             return True
 
         return False
@@ -196,7 +197,7 @@ class Rook(Piece):
 
         # check if destination is occupied by opposite color piece or is empty
         target_piece = self.board.get_piece(to_row, to_col)
-        return target_piece is None or target_piece.color != self.color #
+        return target_piece is not None and target_piece.color != self.color #
 
     def __str__(self):
         return self.symbol
@@ -242,7 +243,7 @@ class King(Piece):
         if abs(to_row - cur_row) <= 1 and abs(to_col - cur_col) <= 1:
             # check if destination is not occupied by a friendly piece
             target_piece = self.board.get_piece(to_row, to_col)
-            if target_piece is None or target_piece.color != self.color:
+            if target_piece is not None and target_piece.color != self.color:
                 return True
         # no castling handler now.
         return False
