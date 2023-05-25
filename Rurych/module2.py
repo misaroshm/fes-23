@@ -1,0 +1,149 @@
+class Employee:
+    def __init__(self, name, position):
+        self.name = name
+        self.position = position
+
+    def perform_duties(self):
+        pass
+
+
+class Developer(Employee):
+    def __init__(self, name, position, skills):
+        super().__init__(name, position)
+        self.skills = skills
+
+    def perform_duties(self):
+        self.write_code()
+
+    def write_code(self):
+        print(f"{self.name} is writing code.")
+
+
+class SoftwareArchitect(Employee):
+    def __init__(self, name, position):
+        super().__init__(name, position)
+
+    def perform_duties(self):
+        self.design_architecture()
+
+    def design_architecture(self):
+        print(f"{self.name} is designing software architecture.")
+
+
+class TeamLead(Employee):
+    def __init__(self, name, position):
+        super().__init__(name, position)
+
+    def perform_duties(self):
+        self.manage_team()
+
+    def manage_team(self):
+        print(f"{self.name} is managing the team.")
+
+
+class QA(Employee):
+    def __init__(self, name, position):
+        super().__init__(name, position)
+
+    def perform_duties(self):
+        self.test_software()
+
+    def test_software(self):
+        print(f"{self.name} is testing the software.")
+
+
+class BusinessAnalyst(Employee):
+    def __init__(self, name, position):
+        super().__init__(name, position)
+
+    def perform_duties(self):
+        self.analyze_requirements()
+
+    def analyze_requirements(self):
+        print(f"{self.name} is analyzing business requirements.")
+
+
+class Software:
+    def __init__(self, name):
+        self.name = name
+        self.modules = []
+
+    def add_module(self, module):
+        self.modules.append(module)
+
+    def implement(self):
+        print(f"Implementing software: {self.name}")
+        for module in self.modules:
+            module.perform_duties()
+
+
+class Module:
+    def __init__(self, name):
+        self.name = name
+
+    def perform_duties(self):
+        pass
+
+
+class MobileApp(Module):
+    def __init__(self, name, platform):
+        super().__init__(name)
+        self.platform = platform
+
+    def perform_duties(self):
+        print(f"{self.name} for {self.platform} is being developed.")
+
+
+class WebApp(Module):
+    def __init__(self, name, backend, frontend):
+        super().__init__(name)
+        self.backend = backend
+        self.frontend = frontend
+
+    def perform_duties(self):
+        print(f"{self.name} with {self.backend} backend and {self.frontend} frontend is being developed.")
+
+
+class DatabaseAPI(Module):
+    def __init__(self, name):
+        super().__init__(name)
+
+    def perform_duties(self):
+        print(f"{self.name} is being implemented.")
+
+
+class Containerization(Module):
+    def __init__(self, name):
+        super().__init__(name)
+
+    def perform_duties(self):
+        print(f"{self.name} is being implemented.")
+
+
+class Deployment(Module):
+    def __init__(self, name):
+        super().__init__(name)
+
+    def perform_duties(self):
+        print(f"{self.name} is being done.")
+
+
+# Example usage:
+developer1 = Developer("John Wick", "Developer", ["Python", "JavaScript"])
+architect = SoftwareArchitect("Will Smith", "Architect")
+team_lead = TeamLead("Tom Cruise", "Team Lead")
+qa = QA("Margot Robbie", "QA Engineer")
+business_analyst = BusinessAnalyst("Emily Davis", "Business Analyst")
+
+software = Software("Project X")
+software.add_module(MobileApp("Mobile App", "Android"))
+software.add_module(WebApp("Web App", "Python Backend", "JS Frontend"))
+software.add_module(DatabaseAPI("Database API"))
+software.add_module(Containerization("Containerization"))
+software.add_module(Deployment("Deployment"))
+
+team = [developer1, architect, team_lead, qa, business_analyst]
+for member in team:
+    member.perform_duties()
+
+software.implement()
