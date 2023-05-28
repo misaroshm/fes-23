@@ -1,0 +1,135 @@
+from dataclasses import dataclass
+from abc import ABC, abstractmethod
+from typing import Optional
+from datetime import datetime
+from typing import List
+@dataclass
+class PersonalInfo:
+    name: str
+    surname: str
+    age: int
+
+    @property
+    def full_name(self) -> str:
+        return f"{self.name} {self.surname}"
+
+    @full_name.setter
+    def full_name(self, name: str):
+        parts = name.split()
+        self.name = parts[0]
+        self.surname = parts[1]
+
+class Persomalinfo:
+    name = str 
+    number = str
+    age = int 
+
+class Staff(ABC):
+    def __init__(self, personal_info: PersonalInfo):
+        self._personal_info = personal_info
+
+    @property
+    def personal_info(self) -> PersonalInfo:
+        return self._personal_info
+
+    @personal_info.setter
+    def personal_info(self, value: PersonalInfo) -> None:
+        if isinstance(value, PersonalInfo):
+            self._personal_info = value
+        else:
+           
+            raise TypeError("personal_info must be an instance of PersonalInfo")
+    @abstractmethod
+    def get_salary(self) -> Optional[float]:
+        pass
+    @abstractmethod
+    def work(self) -> str:
+        pass
+
+
+
+class PostgraduateStudent(Staff):
+    def __init__(self, personal_info: PersonalInfo, student_id: str, department: str, phd_status: str):
+        super().__init__(personal_info)
+        self.student_id = student_id
+        self.department = department
+        self.phd_status = phd_status
+
+class Student:
+    def __init__(self, personal_info: PersonalInfo, student_id: str, department: str):
+        self.personal_info = personal_info
+        self.student_id = student_id
+        self.department = department
+        self.courses = []
+
+    def add_course(self, course: 'Course') -> None:
+        # Add a course to the student's list of courses
+        if course not in self.courses:
+            self.courses.append(course)
+
+    def remove_course(self, course: 'Course') -> None:
+        # Remove a course from the student's list of courses
+        if course in self.courses:
+            self.courses.remove(course)
+    def __str__(self):
+        return f'Personal_info:{self.personal_info},id_student:{self.student_id},department:{self.department}'
+
+
+class Course:
+    def __init__(self, seminars: List[int]):
+        self.seminars = seminars
+        self.students = []
+
+    def add_student(self, student: Student) -> None:
+        # Add a student to the course
+        if student not in self.students:
+            self.students.append(student)
+
+    def remove_student(self, student: Student) -> None:
+        # Remove a student from the course
+        if student in self.students:
+            self.students.remove(student)
+
+class Seminar:
+    def __init__(self, id: int, title: str, deadline: datetime, assignments: List[dict], related_course: str):
+        self.id = id
+        self.title = title
+        self.deadline = deadline
+        self.assignments = assignments
+        self.status = None
+        self.related_course = related_course
+
+class Departament:
+    def __init__(self,title:str):
+        self.title =title
+        self.students =[]
+        self.professors = []
+        self.courses = []
+        self.requests = []
+
+    def proceed_requests(self) -> None:
+        # Process requests from the staff
+        pass
+
+
+class Enrollment:
+    def __init__(self, student, course):
+        self.student = student
+        self.course = course
+
+    def enroll(self) -> None:
+        # Enroll the student in the course
+        self.course.add_student(self.student)
+        self.student.add_course(self.course)
+
+    def unenroll(self) -> None:
+        # Unenroll the student from the course
+        self.course.remove_student(self.student)
+        self.student.remove_course(self.course)
+
+person = PersonalInfo(name="John", surname="Doe", age=25)
+student1 = Student(personal_info=person, student_id="123", department="Computer Science")
+print(str(student1))
+
+
+
