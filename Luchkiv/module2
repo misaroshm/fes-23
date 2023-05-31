@@ -1,0 +1,125 @@
+class Developer:
+    def __init__(self, name, skills, role):
+        self.name = name
+        self.skills = skills
+        self.role = role
+
+    def perform_duties(self):
+        print(f"{self.role} {self.name} is performing duties.")
+
+
+class BusinessAnalyst:
+    def __init__(self, name, skills):
+        self.name = name
+        self.skills = skills
+
+    def perform_duties(self):
+        print(f"Business Analyst {self.name} is performing duties.")
+
+
+class QA:
+    def __init__(self, name, skills):
+        self.name = name
+        self.skills = skills
+
+    def perform_duties(self):
+        print(f"QA {self.name} is performing duties.")
+
+
+class MobileApp:
+    def __init__(self, platform, developer, qa):
+        self.platform = platform
+        self.developer = developer
+        self.qa = qa
+
+    def develop(self):
+        self.developer.perform_duties()
+
+    def test(self):
+        self.qa.perform_duties()
+
+
+class WebApp:
+    def __init__(self, backend, frontend, developer, qa):
+        self.backend = backend
+        self.frontend = frontend
+        self.developer = developer
+        self.qa = qa
+
+    def develop(self):
+        self.developer.perform_duties()
+
+    def test(self):
+        self.qa.perform_duties()
+
+
+class DatabaseAPI:
+    def __init__(self, developer, qa):
+        self.developer = developer
+        self.qa = qa
+
+    def develop(self):
+        self.developer.perform_duties()
+
+    def test(self):
+        self.qa.perform_duties()
+
+
+class Containerization:
+    def __init__(self, developer, qa):
+        self.developer = developer
+        self.qa = qa
+
+    def develop(self):
+        self.developer.perform_duties()
+
+    def test(self):
+        self.qa.perform_duties()
+
+
+class Deployment:
+    def __init__(self, developer, qa):
+        self.developer = developer
+        self.qa = qa
+
+    def develop(self):
+        self.developer.perform_duties()
+
+    def test(self):
+        self.qa.perform_duties()
+
+
+class ProjectConveyor:
+    def __init__(self):
+        self.stages = []
+
+    def add_stage(self, stage):
+        self.stages.append(stage)
+
+    def execute(self):
+        for stage in self.stages:
+            stage.develop()
+            stage.test()
+
+
+if __name__ == "__main__":
+    developer1 = Developer("John", ["Java", "Android"], "Developer")
+    developer2 = Developer("Jane", ["Swift", "iOS"], "Developer")
+    business_analyst = BusinessAnalyst("Alice", ["Requirements Analysis"])
+    qa = QA("Mike", ["Manual Testing"])
+
+    mobile_app = MobileApp("Android", developer1, qa)
+    web_app = WebApp("PythonBackend", "JSFrontend", developer2, qa)
+    database_api = DatabaseAPI(developer1, qa)
+    containerization = Containerization(developer2, qa)
+    deployment = Deployment(developer1, qa)
+
+    conveyor = ProjectConveyor()
+
+    conveyor.add_stage(mobile_app)
+    conveyor.add_stage(web_app)
+    conveyor.add_stage(database_api)
+    conveyor.add_stage(containerization)
+    conveyor.add_stage(deployment)
+
+    conveyor.execute()
