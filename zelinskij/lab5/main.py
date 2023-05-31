@@ -4,9 +4,9 @@ from course import Course
 from seminar import Seminar
 
 # Creating personal info for students
-student_info_1 = PersonalInfo(id=1, _name='Julia_Simpson', address='Lviv', email='julia2003@gmail.com',
+student_info_1 = PersonalInfo(id=1, _name='Bomba', address='Lviv', email='Bomba2003@gmail.com',
                               phone_number='067-97-606-32', position='Student', year=2004)
-student_info_2 = PersonalInfo(id=2, _name='Cringe_Y', address='Kyiv', email='cringe2023@gmail.com',
+student_info_2 = PersonalInfo(id=2, _name='CY', address='Ternopil', email='ter2023@gmail.com',
                               phone_number='067-97-606-32', position='Student', year=2000)
 
 # Creating student instances
@@ -35,8 +35,8 @@ seminar = Seminar(id=2, title="Lab_1", deadline="13.08.2023", status=True)
 seminar.add_comment(message="Good")
 
 # Creating personal info for a professor
-professor_info = PersonalInfo(id=13, _name='Zlobin_GG', address='Lviv', phone_number='098-75-254-34',
-                              email='zlobingg@gmail.com', position='Docent', year=1990)
+professor_info = PersonalInfo(id=13, _name='Katerucnyk', address='Lviv', phone_number='098-75-254-34',
+                              email='katerucnyk@gmail.com', position='Docent', year=1990)
 
 # Creating a professor instance
 professor = Professor(professor_info=professor_info, salary=13000, course=course_java, days_visited=13)
