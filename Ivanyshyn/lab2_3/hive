@@ -107,3 +107,30 @@ class Hive:
 
     def __generate_bees(self) -> None:
         self.__employed_bees = []
+       for i in range(self.__config.EMPLOYED_AGENTS):
+            self.__employed_bees.append(EmployedBee(random.randint(1, self.__config.MAX_FIELD_CAPACITY / 4)))
+
+        self.__inspector_bee = InspectorBee()
+
+    def __assign_bees_to_cells(self) -> list[BeeAssignment]:
+        bee_assignments: list[BeeAssignment] = []
+
+        for i in range(len(self.__employed_bees)):
+            bee_assignments.append(BeeAssignment(self.__employed_bees[i], self.__pick_cell_to_fly()))
+
+        return bee_assignments
+
+    def __set_quality_to_cell(self, cell: Cell, quality: float) -> None:
+        for i in range(0, len(self.__cells_quality_table)):
+            if self.__cells_quality_table[i].cell == cell:
+                self.__cells_quality_table[i].quality = quality
+
+    def __pick_cell_to_fly(self) -> Cell or None:
+        sorted_quality_table = sorted(self.__cells_quality_table, key=lambda x: x.quality, reverse=True)
+
+        for i in range(len(sorted_quality_table)):
+            cell: Cell = sorted_quality_table[i].cell
+
+            if cell.val == 0:
+                continue
+            return cell
